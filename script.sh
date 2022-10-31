@@ -6,9 +6,9 @@ sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-pr
 
 # Change Permission to edit Repo
 
-sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
+sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 # file='/etc/yum.repos.d'
-sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo
+sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
 baseurl=https://packages.microsoft.com/rhel/7/prod/
