@@ -1,8 +1,14 @@
-#! /bin/bash
+#! /usr/bin/bash
 sudo yum update
-file='/etc/yum.repos.d'
 
-cat << EOF > $file
+# Install Microsoft Repo
+sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
+
+# Change Permission to edit Repo
+
+sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
+# file='/etc/yum.repos.d'
+sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
 baseurl=https://packages.microsoft.com/rhel/7/prod/
@@ -14,9 +20,15 @@ EOF
 
 sudo yum install mdatp
 
-config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
+# Create Dir if not exists 
+sudo mkkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
-cat << EOF > $config_file
+# Change Permission to edit config file
+sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+
+# config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
+
+sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 {
    "antivirusEngine":{
       "enableRealTimeProtection":true,
@@ -69,8 +81,10 @@ cat << EOF > $config_file
    }
 }
 EOF
-sudo apt install python3.8
-# sudo apt install wget -y
-# wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/MicrosoftDefenderATPOnboardingLinuxServer.py
-# py3 MicrosoftDefenderATPOnboardingLinuxServer.py
+sudo yum install python3.8
+sudo yum install wget -y
+wget https://test-script-16.s3.ap-south-1.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py
+python3 MicrosoftDefenderATPOnboardingLinuxServer.py
+
+
 
