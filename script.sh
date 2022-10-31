@@ -70,7 +70,7 @@ cat << EOF > $config_file
 }
 EOF
 sudo apt install python3.8
-sudo apt install wget -y
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/MicrosoftDefenderATPOnboardingLinuxServer.py
-py3 MicrosoftDefenderATPOnboardingLinuxServer.py
+# sudo apt install wget -y
+# wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/MicrosoftDefenderATPOnboardingLinuxServer.py
+# py3 MicrosoftDefenderATPOnboardingLinuxServer.py
 
