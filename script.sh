@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-sudo yum update
+sudo yum update -y 
 
 # Install Microsoft Repo
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
@@ -18,10 +18,10 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
-sudo yum install mdatp
+sudo yum install mdatp -y 
 
 # Create Dir if not exists 
-sudo mkkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # Change Permission to edit config file
 sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
@@ -81,7 +81,7 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
    }
 }
 EOF
-sudo yum install python3.8
+sudo yum install python3.8 -y 
 sudo yum install wget -y
 wget https://test-script-16.s3.ap-south-1.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py
 python3 MicrosoftDefenderATPOnboardingLinuxServer.py
