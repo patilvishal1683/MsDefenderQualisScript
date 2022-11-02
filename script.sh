@@ -1,6 +1,13 @@
 #! /usr/bin/bash
 sudo yum update -y 
 
+# Get All Repo
+sudo yum repolist all
+
+# Enable CentOs Repo
+
+sudo yum-config-manager --enable CentOS-7
+
 # Install Microsoft Repo
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
 
@@ -83,8 +90,39 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 EOF
 sudo yum install python3.8 -y 
 sudo yum install wget -y
-wget https://test-script-16.s3.ap-south-1.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py
-python3 MicrosoftDefenderATPOnboardingLinuxServer.py
+wget https://test-script-16.s3.ap-south-1.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
+if grep -R "HTTP request sent, awaiting response... 200 OK" response.txt
+then
+   python3 MicrosoftDefenderATPOnboardingLinuxServer.py
+else
+   echo "Something Went Wrong Unable to Download Python file."
+   kill $!
+fi
 
+# Qualys Scanner Installation
 
+# Test Connectivity between Iguazio Data Node and qualys scanner server
 
+curl -vvv https://qagpublic.qg3.apps.qualys.com 2> file.txt
+# Checking connection status
+if grep -R "Connected to qagpublic.qg3.apps.qualys.com" file.txt
+then 
+   # Download the rpm file from aws s3 bucket 
+   wget https://test-script-16.s3.ap-south-1.amazonaws.com/QualysCloudAgent.rpm
+
+   sudo rpm -ivh QualysCloudAgent.rpm
+
+   Activationid=5a367004-668e-4c07-add1-c1f7765f1d97
+
+   Customerid=79126142-172c-6c9b-8219-3239f99fb195
+
+   sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
+   # kill $!
+   # To acceess logs change user to superuser
+   sudo su
+
+   cat /var/log/qualys/qualys-cloud-agent.log
+else
+   echo "Something Went Wrong Unable to connect to curl request."
+   kill $!
+fi
