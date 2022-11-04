@@ -9,7 +9,7 @@ yum repolist all
 yum-config-manager --enable CentOS-7 - Base
 
 # Install Microsoft Repo
-rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
+sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
 
 # Change Permission to edit Repo
 
