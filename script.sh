@@ -1,5 +1,5 @@
 #! /usr/bin/bash
-sudo yum update -y 
+# sudo yum update -y 
 
 # Get All Repo
 sudo yum repolist all
@@ -90,7 +90,7 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 EOF
 sudo yum install python3.8 -y 
 sudo yum install wget -y
-wget https://test-script-16.s3.ap-south-1.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
+wget https://qualysanddefendersh.s3.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
 if grep -R "HTTP request sent, awaiting response... 200 OK" response.txt
 then
    python3 MicrosoftDefenderATPOnboardingLinuxServer.py
@@ -108,7 +108,7 @@ curl -vvv https://qagpublic.qg3.apps.qualys.com 2> file.txt
 if grep -R "Connected to qagpublic.qg3.apps.qualys.com" file.txt
 then 
    # Download the rpm file from aws s3 bucket 
-   wget https://test-script-16.s3.ap-south-1.amazonaws.com/QualysCloudAgent.rpm
+   wget https://qualysanddefendersh.s3.amazonaws.com/QualysCloudAgent.rpm
 
    sudo rpm -ivh QualysCloudAgent.rpm
 
