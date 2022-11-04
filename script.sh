@@ -2,20 +2,20 @@
 # sudo yum update -y 
 
 # Get All Repo
-sudo yum repolist all
+yum repolist all
 
 # Enable CentOs Repo
 
-sudo yum-config-manager --enable CentOS-7
+yum-config-manager --enable CentOS-7 - Base
 
 # Install Microsoft Repo
-sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
+rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
 
 # Change Permission to edit Repo
 
-sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 # file='/etc/yum.repos.d'
-sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
 baseurl=https://packages.microsoft.com/rhel/7/prod/
@@ -25,17 +25,17 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 
-sudo yum install mdatp -y 
+yum install mdatp -y 
 
 # Create Dir if not exists 
-sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # Change Permission to edit config file
-sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
 
-sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 {
    "antivirusEngine":{
       "enableRealTimeProtection":true,
@@ -88,8 +88,8 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
    }
 }
 EOF
-sudo yum install python3.8 -y 
-sudo yum install wget -y
+yum install python3.8 -y 
+yum install wget -y
 wget https://qualysanddefendersh.s3.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
 if grep -R "HTTP request sent, awaiting response... 200 OK" response.txt
 then
@@ -110,16 +110,15 @@ then
    # Download the rpm file from aws s3 bucket 
    wget https://qualysanddefendersh.s3.amazonaws.com/QualysCloudAgent.rpm
 
-   sudo rpm -ivh QualysCloudAgent.rpm
+   rpm -ivh QualysCloudAgent.rpm
 
    Activationid=5a367004-668e-4c07-add1-c1f7765f1d97
 
    Customerid=79126142-172c-6c9b-8219-3239f99fb195
 
-   sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
+   /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
    # kill $!
    # To acceess logs change user to superuser
-   sudo su
 
    cat /var/log/qualys/qualys-cloud-agent.log
 else
