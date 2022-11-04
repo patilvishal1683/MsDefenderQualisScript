@@ -13,9 +13,9 @@ rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rp
 
 # Change Permission to edit Repo
 
-chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 # file='/etc/yum.repos.d'
-cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
 baseurl=https://packages.microsoft.com/rhel/7/prod/
@@ -28,14 +28,14 @@ EOF
 yum install mdatp -y 
 
 # Create Dir if not exists 
-mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # Change Permission to edit config file
-chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
 
-cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 {
    "antivirusEngine":{
       "enableRealTimeProtection":true,
@@ -116,10 +116,10 @@ then
 
    Customerid=79126142-172c-6c9b-8219-3239f99fb195
 
-   /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
+   sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
    # kill $!
    # To acceess logs change user to superuser
-
+   sudo su
    cat /var/log/qualys/qualys-cloud-agent.log
 else
    echo "Something Went Wrong Unable to connect to curl request."
