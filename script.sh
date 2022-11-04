@@ -5,6 +5,7 @@
 yum repolist all
 
 # Enable CentOs Repo
+sodu su
 
 yum-config-manager --enable CentOS-7 - Base
 
