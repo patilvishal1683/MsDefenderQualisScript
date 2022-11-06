@@ -5,16 +5,19 @@
 yum repolist all
 
 # Enable CentOs Repo
-sodu su
 
-yum-config-manager --enable CentOS-7 - Base
+
+sudo yum-config-manager --enable CentOS-7 - Base
 
 # Install Microsoft Repo
-sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
+sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
 
 # Change Permission to edit Repo
 
-sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
+
+sudo su
+
 # file='/etc/yum.repos.d'
 sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
@@ -89,9 +92,7 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
    }
 }
 EOF
-yum install python3.8 -y 
-yum install wget -y
-wget https://qualysanddefendersh.s3.amazonaws.com/MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
+aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py ./MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
 if grep -R "HTTP request sent, awaiting response... 200 OK" response.txt
 then
    python3 MicrosoftDefenderATPOnboardingLinuxServer.py
@@ -109,7 +110,7 @@ curl -vvv https://qagpublic.qg3.apps.qualys.com 2> file.txt
 if grep -R "Connected to qagpublic.qg3.apps.qualys.com" file.txt
 then 
    # Download the rpm file from aws s3 bucket 
-   wget https://qualysanddefendersh.s3.amazonaws.com/QualysCloudAgent.rpm
+   aws s3 cp s3://qualysanddefendersh/QualysCloudAgent.rpm ./QualysCloudAgent.rpm
 
    rpm -ivh QualysCloudAgent.rpm
 
@@ -121,6 +122,7 @@ then
    # kill $!
    # To acceess logs change user to superuser
    sudo su
+   # sudo chmod 777 /var/log/qualys/qualys-cloud-agent.log
    cat /var/log/qualys/qualys-cloud-agent.log
 else
    echo "Something Went Wrong Unable to connect to curl request."
