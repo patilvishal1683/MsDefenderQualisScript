@@ -1,18 +1,4 @@
-#! /usr/bin/bash
 # sudo yum update -y 
-sudo su
-# Get All Repo
-yum repolist all
-
-# Enable CentOs Repo
-
-sudo yum-config-manager --enable CentOS-7 - Base
-
-# Install Microsoft Repo
-sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-
-# Change Permission to edit Repo
-sudo sh ./Additional_sh.sh
 
 sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
 
