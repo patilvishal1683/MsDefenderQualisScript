@@ -1,23 +1,23 @@
 #! /usr/bin/bash
 # sudo yum update -y 
-sudo su
+# sudo su
 # Get All Repo
 yum repolist all
 
 # Enable CentOs Repo
 
-sudo yum-config-manager --enable CentOS-7 - Base
+yum-config-manager --enable CentOS-7 - Base
 
 # Install Microsoft Repo
-sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
 
 # Change Permission to edit Repo
-sudo sh ./Additional_sh.sh
+# sudo sh ./Additional_sh.sh
 
-sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
+chmod 777 /etc/yum.repos.d/microsoft-prod.repo
 
 # file='/etc/yum.repos.d'
-sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
+cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
 baseurl=https://packages.microsoft.com/rhel/7/prod/
@@ -30,14 +30,14 @@ EOF
 yum install mdatp -y 
 
 # Create Dir if not exists 
-sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # Change Permission to edit config file
-sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 
 # config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
 
-sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
 {
    "antivirusEngine":{
       "enableRealTimeProtection":true,
@@ -90,14 +90,9 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
    }
 }
 EOF
-aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py ./MicrosoftDefenderATPOnboardingLinuxServer.py 2> response.txt
-if grep -R "HTTP request sent, awaiting response... 200 OK" response.txt
-then
-   python3 MicrosoftDefenderATPOnboardingLinuxServer.py
-else
-   echo "Something Went Wrong Unable to Download Python file."
-   kill $!
-fi
+aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py ./MicrosoftDefenderATPOnboardingLinuxServer.py 
+
+python3 MicrosoftDefenderATPOnboardingLinuxServer.py
 
 # Qualys Scanner Installation
 
@@ -115,11 +110,11 @@ then
    Activationid=5a367004-668e-4c07-add1-c1f7765f1d97
 
    Customerid=79126142-172c-6c9b-8219-3239f99fb195
-
-   sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
+   
+   /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
    # kill $!
    # To acceess logs change user to superuser
-   sudo su
+   # sudo su
    # sudo chmod 777 /var/log/qualys/qualys-cloud-agent.log
    cat /var/log/qualys/qualys-cloud-agent.log
 else
