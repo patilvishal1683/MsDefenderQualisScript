@@ -93,8 +93,8 @@ aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py 
 python3 MicrosoftDefenderATPOnboardingLinuxServer.py
 
 # Test Installation
-mdatp health --field org_id 2> org_id.txt
-mdatp health --field healthy 2> health.txt
+mdatp health --field org_id 
+mdatp health --field healthy
 mdatp connectivity test
 
 # Qualys Scanner Installation
