@@ -1,6 +1,6 @@
 #! /usr/bin/bash
-# sudo yum update -y 
-# sudo su
+
+sudo su
 # Get All Repo
 yum repolist all
 
@@ -12,11 +12,9 @@ yum-config-manager --enable CentOS-7 - Base
 rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
 
 # Change Permission to edit Repo
-# sudo sh ./Additional_sh.sh
 
 chmod 777 /etc/yum.repos.d/microsoft-prod.repo
 
-# file='/etc/yum.repos.d'
 cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
 name=Microsoft Defender for Endpoint
@@ -94,6 +92,11 @@ aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py 
 
 python3 MicrosoftDefenderATPOnboardingLinuxServer.py
 
+# Test Installation
+mdatp health --field org_id 2> org_id.txt
+mdatp health --field healthy 2> health.txt
+mdatp connectivity test
+
 # Qualys Scanner Installation
 
 # Test Connectivity between Iguazio Data Node and qualys scanner server
@@ -110,12 +113,9 @@ then
    Activationid=5a367004-668e-4c07-add1-c1f7765f1d97
 
    Customerid=79126142-172c-6c9b-8219-3239f99fb195
-   
+
    /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$Activationid CustomerId=$Customerid
-   # kill $!
-   # To acceess logs change user to superuser
-   # sudo su
-   # sudo chmod 777 /var/log/qualys/qualys-cloud-agent.log
+   chmod 777 /var/log/qualys/qualys-cloud-agent.log
    cat /var/log/qualys/qualys-cloud-agent.log
 else
    echo "Something Went Wrong Unable to connect to curl request."
