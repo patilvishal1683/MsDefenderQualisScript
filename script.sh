@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-sudo su
+# sudo su
 # Get All Repo
 yum repolist all
 
