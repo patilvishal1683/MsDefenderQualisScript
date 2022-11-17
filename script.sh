@@ -2,18 +2,18 @@
 
 # sudo su
 # Get All Repo
-sudo yum repolist all
+sudo yum repolist all &>> temp/log.log 
 
 # Enable CentOs Repo
 
-sudo yum-config-manager --enable CentOS-7 - Base
+sudo yum-config-manager --enable CentOS-7 - Base &>> temp/log.log 
 
 # Install Microsoft Repo
-sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm &>> temp/log.log 
 
 # Change Permission to edit Repo
 
-sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo
+sudo chmod 777 /etc/yum.repos.d/microsoft-prod.repo &>> temp/log.log 
 
 sudo cat << EOF > /etc/yum.repos.d/microsoft-prod.repo.rpmnew
 [microsoft-prod]
@@ -23,15 +23,15 @@ enabled=1
 fastestmirror_enabled=0
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
+EOF &>> temp/log.log 
 
-sudo yum install mdatp -y 
+sudo yum install mdatp -y  &>> temp/log.log 
 
 # Create Dir if not exists 
-sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo mkdir -p /etc/opt/microsoft/mdatp/managed && sudo touch /etc/opt/microsoft/mdatp/managed/mdatp_managed.json &>> temp/log.log 
 
 # Change Permission to edit config file
-sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
+sudo chmod 777 /etc/opt/microsoft/mdatp/managed/mdatp_managed.json &>> temp/log.log 
 
 # config_file = '/etc/opt/microsoft/mdatp/managed/mdatp_managed.json'
 
@@ -87,26 +87,27 @@ sudo cat << EOF > /etc/opt/microsoft/mdatp/managed/mdatp_managed.json
       "automaticDefinitionUpdateEnabled":true
    }
 }
-EOF
-sudo aws s3 cp s3://qualysanddefendersh/MicrosoftDefenderATPOnboardingLinuxServer.py ./MicrosoftDefenderATPOnboardingLinuxServer.py 
+EOF &>> temp/log.log 
 
-sudo python3 MicrosoftDefenderATPOnboardingLinuxServer.py
+sudo aws s3 cp s3://485443633092-us-east-1-testscriptfiles/MicrosoftDefenderATPOnboardingLinuxServer.py ./MicrosoftDefenderATPOnboardingLinuxServer.py &>> temp/log.log  
+
+sudo python3 MicrosoftDefenderATPOnboardingLinuxServer.py &>> temp/log.log 
 
 # Test Installation
-sudo mdatp health --field org_id 
-sudo mdatp health --field healthy
-sudo mdatp connectivity test
+sudo mdatp health --field org_id &>> temp/log.log 
+sudo mdatp health --field healthy &>> temp/log.log 
+sudo mdatp connectivity test &>> temp/log.log 
 
 # Qualys Scanner Installation
 
 # Test Connectivity between Iguazio Data Node and qualys scanner server
 
-sudo curl -vvv https://qagpublic.qg3.apps.qualys.com 2> file.txt
+sudo curl -vvv https://qagpublic.qg3.apps.qualys.com &>> temp/log.log 
 # Checking connection status
-if grep -R "Connected to qagpublic.qg3.apps.qualys.com" file.txt
+if grep -R "Connected to qagpublic.qg3.apps.qualys.com" file.txt 
 then 
    # Download the rpm file from aws s3 bucket 
-   sudo aws s3 cp s3://qualysanddefendersh/QualysCloudAgent.rpm ./QualysCloudAgent.rpm
+   sudo aws s3 cp s3://485443633092-us-east-1-testscriptfiles/QualysCloudAgent.rpm ./QualysCloudAgent.rpm
 
    sudo rpm -ivh QualysCloudAgent.rpm
 
@@ -120,10 +121,10 @@ then
 else
    echo "Something Went Wrong Unable to connect to curl request."
    kill $!
-fi
+fi &>> temp/log.log 
 
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip
-unzip AmazonCloudWatchAgent.zip
-sudo ./install.sh
-sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:/alarm/AWS-CWAgentConfig -s
-aws s3 cp s3://qualysanddefendersh/script.sh ./script.sh 2> response.txt
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/linux/amd64/latest/AmazonCloudWatchAgent.zip &>> temp/log.log 
+unzip AmazonCloudWatchAgent.zip &>> temp/log.log 
+sudo ./install.sh &>> temp/log.log 
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:/alarm/AWS-CWAgentConfig -s &>> temp/log.log 
+
